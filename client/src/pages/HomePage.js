@@ -45,8 +45,6 @@ class HomePage extends React.Component {
    this.goToTest = this.goToTest.bind(this);
 
    this.updateWeaknessStrength = this.updateWeaknessStrength.bind(this);
-
-   this.loadData = this.loadData(this);
   }
 
   
@@ -67,9 +65,6 @@ class HomePage extends React.Component {
 
   componentDidUpdate(prevProps, prevState){
 
-    console.log("prevprop", prevProps);
-    console.log("prevstate", prevState);
-
     if (this.state.userID !== prevState.userID){
       getWeaknessStrength(this.state.userID).then(res => {
         //console.log(res.results)
@@ -80,16 +75,13 @@ class HomePage extends React.Component {
           weakness = this.state.weaknessStrength[0].MinCorrectSubject;
           strength = this.state.weaknessStrength[0].MaxCorrectSubject;
         }
-
-     
       })
-
     }
-
   }
+
   addLoginHandler(loginData) {
    this.setState({userID: loginData.userID });
-
+   this.authentication = true;
    this.updateWeaknessStrength();
 }
 
@@ -102,17 +94,24 @@ goToTest() {
 }
 
 
-loadData() {
-
-  if (this.state.weaknessStrength.length == 0){
-    return "Waiting for UserID Input"
-  }
-  else{
-    return this.state.weaknessStrength.MinCorrectSubject;
-  }
-};
 
   render() {
+    let button;
+
+    if (!this.authentication) {
+      button = <LoginForm onLogin = {this.addLoginHandler} />;
+    } else {
+      button = <h2>Welcome Back!</h2>;
+
+      if (this.state.weaknessStrength[0] !== undefined){
+        weakness = this.state.weaknessStrength[0].MinCorrectSubject;
+        strength = this.state.weaknessStrength[0].MaxCorrectSubject;
+      }
+
+    
+
+
+    }
      
     return (
 
@@ -131,13 +130,11 @@ loadData() {
 
           <div><DisplayCards title={strength} textBody="Strongest Subject" /> </div>
 
-
           <div><DisplayCards title={weakness} textBody="Weakest Subject" /> </div>
 
-          <Login authentication = {this.state.authentication}/>
-
-          <LoginForm onLogin = {this.addLoginHandler}/>
-
+          <div>
+            {button}
+          </div>
 
           <button onClick= {this.goToTest}>Click here to test!</button>
 

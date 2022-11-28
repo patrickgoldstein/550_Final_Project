@@ -12,9 +12,6 @@ const app = express();
 app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 
 //Route 1: 
-
-app.get('/hello', routes.hello)
-
 app.get('/question', routes.question)
 
 
@@ -27,6 +24,8 @@ app.get('/userCorrectness', routes.userCorrectness)
 //Route 4
 app.get('/weaknessStrength', routes.weaknessStrength)
 
+
+//Route 5
 app.get('/grow', routes.growQuestions)
 
 
